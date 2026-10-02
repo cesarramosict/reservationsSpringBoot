@@ -1,10 +1,10 @@
-package reservations_springboot;
+package be.iccbxl.pid.reservationsspringboot;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
- * Poitn d'entrée de l'application.
- * Sert à lancer le framework Sring Boot ainsi que le serveur web intégré.
+ * Point d'entrée de l'application.
+ * Sert à lancer le framework StringBoot ainsi que le serveur web intégré.
  *
  * @author Julio Ramos do Carmo
  */
