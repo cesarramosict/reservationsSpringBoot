@@ -11,9 +11,9 @@
 	<groupId>be.iccbxl.pid</groupId>
 	<artifactId>reservations-springboot</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name/>
-	<description/>
-	<url/>
+    <name>Reservations-Spring-Boot</name>
+    <description>Projet Réservations avec Spring Boot</description>
+    <url/>
 	<licenses>
 		<license/>
 	</licenses>

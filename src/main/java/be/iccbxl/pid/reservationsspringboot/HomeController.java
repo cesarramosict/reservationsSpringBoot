@@ -1,15 +1,14 @@
 package be.iccbxl.pid.reservationsspringboot;
 
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 /**
  * Contrôleur de la page réception (accueil).
  * Répond aux requetes envoyées a la racine du site.
  *
  * @author Julio Ramos do Carmo
  */
-
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 @RestController
 
 public class HomeController {
@@ -23,3 +22,4 @@ public class HomeController {
         return "Greetings from Spring Boot!";
     }
 }
+
