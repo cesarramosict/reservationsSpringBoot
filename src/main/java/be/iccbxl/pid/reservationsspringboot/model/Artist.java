@@ -1,13 +1,21 @@
 package be.iccbxl.pid.reservationsspringboot.model;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+/**
+ * Classe artist
+ * @author Julio Ramos do Carmo
+ */
+
+@Entity
+@Table (name="artists")
+
+
 
 public class Artist {
     @Id
-    @GeneratedValue()
-    private Long Id;
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private Long id;
     private String firstname;
     private String lastname;
 
@@ -19,11 +27,11 @@ public class Artist {
         }
 
     public Long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(Long id) {
-        Id = id;
+        this.id = id;
     }
 
     public String getFirstname() {
@@ -44,10 +52,6 @@ public class Artist {
 
     @Override
     public String toString() {
-        return "Artist{" +
-                "Id=" + Id +
-                ", firstname='" + firstname + '\'' +
-                ", lastname='" + lastname + '\'' +
-                '}';
+        return firstname + " " + lastname;
     }
 }
