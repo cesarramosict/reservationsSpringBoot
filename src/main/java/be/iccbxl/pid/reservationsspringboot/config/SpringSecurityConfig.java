@@ -7,6 +7,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder.BCryptVersion;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 
 /**
  * Configuration de Spring Security : chiffrement des mots de passe et règles d'accès.
@@ -38,7 +39,12 @@ public class SpringSecurityConfig {
                         .usernameParameter("login")
                         .failureUrl("/login?loginError=true")
                         .permitAll())
-                .logout((logout) -> logout.permitAll())
+                .logout((logout) -> logout
+                        .logoutSuccessUrl("/login?logoutSuccess=true")
+                        .permitAll())
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(
+                                new LoginUrlAuthenticationEntryPoint("/login?loginRequired=true")))
                 .build();
     }
 }

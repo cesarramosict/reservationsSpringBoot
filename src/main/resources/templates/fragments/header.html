@@ -13,11 +13,6 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <div style="float:right">
-                    <p sec:authorize="!isAuthenticated()">Vous n'êtes pas connecté.<br>
-                        <a th:href="@{/login}" class="nav-link">Se connecter</a>
-                    </p>
-                </div>
                 <li th:classappend="${module == 'home' ? 'active' : ''}">
                     <a href="#" th:href="@{/}">Home</a>
                 </li>
@@ -25,6 +20,17 @@
                     <a href="#" th:href="@{/artists}">Artists</a>
                 </li>
             </ul>
+        </div>
+        <div style="float:right">
+            <p sec:authorize="!isAuthenticated()">Vous n'êtes pas connecté.<br>
+                <a th:href="@{/login}" class="nav-link">Se connecter</a>
+            </p>
+            <div sec:authorize="isAuthenticated()">
+                <p>Bonjour <span sec:authentication="principal.username">Bob</span>!</p>
+                <form th:action="@{/logout}" method="post" class="nav-link">
+                    <button class="unset">Se déconnecter</button>
+                </form>
+            </div>
         </div>
     </div>
 </header>
