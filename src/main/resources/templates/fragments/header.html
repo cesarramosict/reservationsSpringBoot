@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="utf-8">
     <title>Header fragment</title>
@@ -12,6 +13,11 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
+                <div style="float:right">
+                    <p sec:authorize="!isAuthenticated()">Vous n'êtes pas connecté.<br>
+                        <a th:href="@{/login}" class="nav-link">Se connecter</a>
+                    </p>
+                </div>
                 <li th:classappend="${module == 'home' ? 'active' : ''}">
                     <a href="#" th:href="@{/}">Home</a>
                 </li>
