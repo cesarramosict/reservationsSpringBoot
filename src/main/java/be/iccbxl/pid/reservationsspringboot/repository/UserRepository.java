@@ -25,4 +25,8 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     // Cherche un utilisateur par son identifiant
     User findById(long id);
+
+    // Vérifie si un email ou un login est déjà utilisé
+    boolean existsByEmail(String email);
+    boolean existsByLogin(String login);
 }
