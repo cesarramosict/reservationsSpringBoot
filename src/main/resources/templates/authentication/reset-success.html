@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main}">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Réinitialisation effectuée</title>
+</head>
+<body>
+<div class="container">
+    <div id="notification" th:replace="~{main :: notification}"></div>
+    <div layout:fragment="content">
+        <h2>Mot de passe mis à jour</h2>
+        <p>Votre mot de passe a été réinitialisé avec succès. <a href="/login">Se connecter</a></p>
+    </div>
+</div>
+</body>
+</html>

@@ -31,6 +31,10 @@ public class UserService {
     public User getUser(long id) {
         return userRepository.findById(id);
     }
+    // Retourne l'utilisateur qui possède cet email, ou null s'il n'existe pas
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email).orElse(null);
+    }
 
     // Ajoute un nouvel utilisateur
     public void addUser(User user) {

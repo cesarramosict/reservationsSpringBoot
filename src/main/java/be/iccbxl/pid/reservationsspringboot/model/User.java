@@ -2,6 +2,7 @@ package be.iccbxl.pid.reservationsspringboot.model;
 
 import java.time.LocalDateTime;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -25,11 +26,19 @@ public class User {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
+
+    @Column(unique = true, nullable = false)
     private String login;
+
+    @Column(nullable = false)
     private String password;
+
     private String firstname;
     private String lastname;
+
+    @Column(unique = true, nullable = false)
     private String email;
+
     private String langue;
 
     @Enumerated(EnumType.STRING)
