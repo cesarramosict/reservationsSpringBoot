@@ -1,5 +1,6 @@
 package be.iccbxl.pid.reservationsspringboot.dto;
 
+import be.iccbxl.pid.reservationsspringboot.validation.PasswordMatches;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -11,6 +12,7 @@ import lombok.Data;
  * @author Julio Ramos do Carmo
  */
 @Data
+@PasswordMatches  // annotation personnalisée
 public class UserRegistrationDto {
 
     @NotBlank(message = "Le prénom est obligatoire")

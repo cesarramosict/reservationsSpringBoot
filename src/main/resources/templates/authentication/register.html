@@ -14,27 +14,37 @@
             <div>
                 <label>Prénom</label>
                 <input type="text" th:field="*{firstname}" required>
+                <div class="error" th:errors="*{firstname}"></div>
             </div>
             <div>
                 <label>Nom</label>
                 <input type="text" th:field="*{lastname}" required>
+                <div class="error" th:errors="*{lastname}"></div>
             </div>
             <div>
                 <label>Email</label>
                 <input type="email" th:field="*{email}" required>
+                <div class="error" th:errors="*{email}"></div>
             </div>
             <div>
                 <label>Login</label>
                 <input type="text" th:field="*{login}" required>
+                <div class="error" th:errors="*{login}"></div>
             </div>
             <div>
                 <label>Mot de passe</label>
                 <input type="password" th:field="*{password}" required>
+                <div class="error" th:errors="*{password}"></div>
             </div>
             <div>
                 <label>Confirmer le mot de passe</label>
                 <input type="password" th:field="*{confirmPassword}" required>
+                <div class="error" th:errors="*{confirmPassword}"></div>
             </div>
+
+            <!-- Erreur globale sur le formulaire (mot de passe non concordant) -->
+            <div class="error" th:if="${#fields.hasGlobalErrors()}" th:errors="*{global}"></div>
+
             <div>
                 <label>Langue</label>
                 <select th:field="*{langue}">
@@ -43,6 +53,7 @@
                     <option value="nl">Néerlandais</option>
                     <option value="en">Anglais</option>
                 </select>
+                <div class="error" th:errors="*{langue}"></div>
             </div>
             <button type="submit">S'inscrire</button>
         </form>
