@@ -11,6 +11,8 @@
         <h2 class="mb-4">Connexion</h2>
 
         <form th:action="@{/login}" method="post">
+            <!-- Jeton CSRF (protection contre les attaques CSRF) -->
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
             <div>
                 <label>Login:</label>
                 <input type="text" name="login" maxlength="60" required>
