@@ -1,5 +1,8 @@
 package be.iccbxl.pid.reservationsspringboot.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.*;
 
 /**
@@ -17,6 +20,10 @@ public class Locality {
     private String postalCode;
 
     private String locality;
+
+    // Lieux de spectacle situés dans cette localité (côté inverse de la relation)
+    @OneToMany(targetEntity=Location.class, mappedBy="locality")
+    private List<Location> locations = new ArrayList<>();
 
     protected Locality() { }
 
@@ -43,6 +50,30 @@ public class Locality {
 
     public void setLocality(String locality) {
         this.locality = locality;
+    }
+
+    public List<Location> getLocations() {
+        return locations;
+    }
+
+    // Ajoute un lieu à cette localité
+    public Locality addLocation(Location location) {
+        if (!this.locations.contains(location)) {
+            this.locations.add(location);
+            location.setLocality(this);
+        }
+        return this;
+    }
+
+    // Retire un lieu de cette localité
+    public Locality removeLocation(Location location) {
+        if (this.locations.contains(location)) {
+            this.locations.remove(location);
+            if (location.getLocality() == this) {
+                location.setLocality(null);
+            }
+        }
+        return this;
     }
 
     @Override
