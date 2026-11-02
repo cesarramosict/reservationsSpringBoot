@@ -18,6 +18,11 @@
                     return false;|">Delete</a>
             </form>
         </div>
+        <h3>Liste des types</h3>
+        <ul th:unless="${#lists.isEmpty(artist.types)}">
+            <li th:each="type : ${artist.types}" th:text="${type.type}">Type</li>
+        </ul>
+        <p th:if="${#lists.isEmpty(artist.types)}">Aucun type.</p>
 
         <nav><a th:href="@{/artists}">Retour à l'index</a></nav>
     </div>
