@@ -62,6 +62,10 @@ public class UserService {
 
         userRepository.save(user);
     }
+    // Ajoute un nouvel utilisateur
+    public void addUser(User user) {
+        userRepository.save(user);
+    }
 
     // Modifie un utilisateur existant
     public void updateUser(long id, User user) {
