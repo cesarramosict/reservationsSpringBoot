@@ -57,6 +57,12 @@ public class User {
     @ToString.Exclude
     private List<Role> roles = new ArrayList<>();
 
+    // Représentations réservées par l'utilisateur (table reservations) — côté inverse
+    @ManyToMany(mappedBy = "users")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private List<Representation> representations = new ArrayList<>();
+
     // Ajoute un rôle à l'utilisateur (met à jour les deux côtés)
     public User addRole(Role role) {
         if (!this.roles.contains(role)) {
@@ -71,6 +77,23 @@ public class User {
         if (this.roles.contains(role)) {
             this.roles.remove(role);
             role.getUsers().remove(this);
+        }
+        return this;
+    }
+    // Ajoute une réservation de représentation (met à jour les deux côtés)
+    public User addRepresentation(Representation representation) {
+        if (!this.representations.contains(representation)) {
+            this.representations.add(representation);
+            representation.addUser(this);
+        }
+        return this;
+    }
+
+    // Retire une réservation de représentation (met à jour les deux côtés)
+    public User removeRepresentation(Representation representation) {
+        if (this.representations.contains(representation)) {
+            this.representations.remove(representation);
+            representation.getUsers().remove(this);
         }
         return this;
     }

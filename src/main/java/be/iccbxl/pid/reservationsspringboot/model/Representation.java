@@ -1,6 +1,8 @@
 package be.iccbxl.pid.reservationsspringboot.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.*;
 
@@ -33,6 +35,14 @@ public class Representation {
     @ManyToOne
     @JoinColumn(name="location_id", nullable=true)
     private Location location;
+
+    // Utilisateurs qui ont réservé cette représentation (table reservations) — côté propriétaire
+    @ManyToMany
+    @JoinTable(
+            name = "reservations",
+            joinColumns = @JoinColumn(name = "representation_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private List<User> users = new ArrayList<>();
 
     public Representation() { }
 
@@ -68,6 +78,27 @@ public class Representation {
 
     public void setLocation(Location location) {
         this.location = location;
+    }
+    public List<User> getUsers() {
+        return users;
+    }
+
+    // Ajoute un utilisateur qui réserve cette représentation (met à jour les deux côtés)
+    public Representation addUser(User user) {
+        if (!this.users.contains(user)) {
+            this.users.add(user);
+            user.addRepresentation(this);
+        }
+        return this;
+    }
+
+    // Retire un utilisateur de cette représentation (met à jour les deux côtés)
+    public Representation removeUser(User user) {
+        if (this.users.contains(user)) {
+            this.users.remove(user);
+            user.getRepresentations().remove(this);
+        }
+        return this;
     }
 
     @Override
