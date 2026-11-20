@@ -3,6 +3,7 @@ package be.iccbxl.pid.reservationsspringboot.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +30,7 @@ public class Artist {
     @Size(min=2, max=60, message = "The lastname must be between 2 and 60 characters long.")
     private String lastname;
     // Types (fonctions) exercés par l'artiste — côté inverse de la relation ManyToMany
+    @JsonIgnore
     @ManyToMany(mappedBy = "artists")
     private List<Type> types = new ArrayList<>();
 
