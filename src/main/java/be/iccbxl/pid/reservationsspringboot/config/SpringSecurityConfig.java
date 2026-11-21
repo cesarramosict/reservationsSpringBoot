@@ -40,8 +40,9 @@ public class SpringSecurityConfig {
     @Bean
     public SecurityFilterChain configure(final HttpSecurity http) throws Exception {
         return http.cors(Customizer.withDefaults())
-                .csrf(Customizer.withDefaults())
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/api/**"))
                 .authorizeHttpRequests(auth -> {
+                    auth.requestMatchers("/api/admin/**").hasRole("ADMIN");
                     auth.requestMatchers("/admin").hasRole("ADMIN");
                     auth.requestMatchers("/user").hasRole("MEMBER");
                     auth.anyRequest().permitAll();
@@ -50,6 +51,7 @@ public class SpringSecurityConfig {
                         .loginPage("/login")
                         .usernameParameter("login")
                         .failureUrl("/login?loginError=true"))
+                .httpBasic(Customizer.withDefaults())
                 .logout(logout -> logout
                         .logoutSuccessUrl("/login?logoutSuccess=true")
                         .deleteCookies("JSESSIONID"))
