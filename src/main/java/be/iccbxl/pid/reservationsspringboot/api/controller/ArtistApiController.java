@@ -1,6 +1,11 @@
 package be.iccbxl.pid.reservationsspringboot.api.controller;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import java.util.List;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import be.iccbxl.pid.reservationsspringboot.model.Artist;
+import be.iccbxl.pid.reservationsspringboot.api.hateoas.ArtistModelAssembler;
 import be.iccbxl.pid.reservationsspringboot.repository.ArtistRepository;
+
 
 /**
  * API REST des artistes : renvoie les données au format JSON (et non une page HTML).
@@ -24,24 +31,31 @@ import be.iccbxl.pid.reservationsspringboot.repository.ArtistRepository;
 public class ArtistApiController {
 
     private final ArtistRepository repository;
+    private final ArtistModelAssembler assembler;
 
-    public ArtistApiController(ArtistRepository repository) {
+    public ArtistApiController(ArtistRepository repository, ArtistModelAssembler assembler) {
         this.repository = repository;
+        this.assembler = assembler;
     }
 
-    // GET : liste de tous les artistes
+    // GET : liste de tous les artistes, chacun avec ses liens + un lien vers la liste
     @GetMapping("/artists")
-    public List<Artist> all() {
-        return (List<Artist>) repository.findAll();
+    public CollectionModel<EntityModel<Artist>> all() {
+        List<EntityModel<Artist>> artists = ((List<Artist>) repository.findAll()).stream()
+                .map(assembler::toModel)
+                .toList();
+
+        return CollectionModel.of(artists,
+                linkTo(methodOn(ArtistApiController.class).all()).withSelfRel());
     }
 
-    // GET : un seul artiste
+    // GET : un seul artiste avec ses liens
     @GetMapping("/artists/{id}")
-    public Artist one(@PathVariable Long id) {
-        return repository.findById(id)
+    public EntityModel<Artist> one(@PathVariable Long id) {
+        Artist artist = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Artist not found"));
+        return assembler.toModel(artist);
     }
-
     // POST : ajouter un artiste (réservé à l'administrateur)
     @PostMapping("/admin/artists")
     public Artist newArtist(@RequestBody Artist newArtist) {
