@@ -6,6 +6,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import java.util.List;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -56,16 +57,20 @@ public class ArtistApiController {
                 .orElseThrow(() -> new RuntimeException("Artist not found"));
         return assembler.toModel(artist);
     }
-    // POST : ajouter un artiste (réservé à l'administrateur)
+    // POST : ajouter un artiste (réservé à l'administrateur) -> 201 Created + liens
     @PostMapping("/admin/artists")
-    public Artist newArtist(@RequestBody Artist newArtist) {
-        return repository.save(newArtist);
+    public ResponseEntity<?> newArtist(@RequestBody Artist newArtist) {
+        Artist savedArtist = repository.save(newArtist);
+
+        return ResponseEntity
+                .created(linkTo(methodOn(ArtistApiController.class).one(savedArtist.getId())).toUri())
+                .body(assembler.toModel(savedArtist));
     }
 
-    // PUT : modifier un artiste (réservé à l'administrateur)
+    // PUT : modifier un artiste (réservé à l'administrateur) -> 201 + liens
     @PutMapping("/admin/artists/{id}")
-    public Artist replaceArtist(@RequestBody Artist newArtist, @PathVariable Long id) {
-        return repository.findById(id)
+    public ResponseEntity<?> replaceArtist(@RequestBody Artist newArtist, @PathVariable Long id) {
+        Artist updatedArtist = repository.findById(id)
                 .map(artist -> {
                     artist.setFirstname(newArtist.getFirstname());
                     artist.setLastname(newArtist.getLastname());
@@ -75,11 +80,16 @@ public class ArtistApiController {
                     newArtist.setId(id);
                     return repository.save(newArtist);
                 });
+
+        return ResponseEntity
+                .created(linkTo(methodOn(ArtistApiController.class).one(updatedArtist.getId())).toUri())
+                .body(assembler.toModel(updatedArtist));
     }
 
-    // DELETE : supprimer un artiste (réservé à l'administrateur)
+    // DELETE : supprimer un artiste (réservé à l'administrateur) -> 204 No Content
     @DeleteMapping("/admin/artists/{id}")
-    public void deleteArtist(@PathVariable Long id) {
+    public ResponseEntity<?> deleteArtist(@PathVariable Long id) {
         repository.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }
