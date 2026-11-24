@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.security.core.Authentication;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -94,7 +95,12 @@ public class ArtistController {
     }
     // Affiche le formulaire vide pour créer un nouvel artiste
     @GetMapping("/artists/create")
-    public String create(Model model) {
+    public String create(Model model, Authentication authentication) {
+        // Mauvaise approche (pour comprendre) : vérification manuelle du rôle dans la méthode
+        if (authentication == null || authentication.getAuthorities().stream()
+                .noneMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+            return "redirect:/login?loginRequired=true";
+        }
         if (!model.containsAttribute("artist")) {
             model.addAttribute("artist", new Artist());
         }
