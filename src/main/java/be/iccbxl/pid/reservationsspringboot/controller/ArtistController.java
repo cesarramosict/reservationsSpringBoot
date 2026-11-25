@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -55,6 +56,7 @@ public class ArtistController {
         return "artist/show";
     }
     // Affiche le formulaire de modification pré-rempli avec les données de l'artiste
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/artists/{id}/edit")
     public String edit(Model model, @PathVariable long id, HttpServletRequest request) {
         Artist artist = service.getArtist(id);
