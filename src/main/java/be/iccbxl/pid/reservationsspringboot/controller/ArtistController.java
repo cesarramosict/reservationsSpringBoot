@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -56,7 +55,7 @@ public class ArtistController {
         return "artist/show";
     }
     // Affiche le formulaire de modification pré-rempli avec les données de l'artiste
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/artists/{id}/edit")
     public String edit(Model model, @PathVariable long id, HttpServletRequest request) {
         Artist artist = service.getArtist(id);
@@ -76,6 +75,7 @@ public class ArtistController {
     }
 
     // Valide les données du formulaire puis enregistre les modifications de l'artiste
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/artists/{id}/edit")
     public String update(@Valid @ModelAttribute Artist artist, BindingResult bindingResult,
                          @PathVariable long id, Model model, RedirectAttributes redirAttrs) {
@@ -96,13 +96,9 @@ public class ArtistController {
         return "redirect:/artists/" + artist.getId();
     }
     // Affiche le formulaire vide pour créer un nouvel artiste
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/artists/create")
-    public String create(Model model, Authentication authentication) {
-        // Mauvaise approche (pour comprendre) : vérification manuelle du rôle dans la méthode
-        if (authentication == null || authentication.getAuthorities().stream()
-                .noneMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
-            return "redirect:/login?loginRequired=true";
-        }
+    public String create(Model model) {
         if (!model.containsAttribute("artist")) {
             model.addAttribute("artist", new Artist());
         }
@@ -110,7 +106,9 @@ public class ArtistController {
         return "artist/create";
     }
 
+
     // Valide les données du formulaire puis enregistre le nouvel artiste
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/artists/create")
     public String store(@Valid @ModelAttribute Artist artist, BindingResult bindingResult,
                         Model model, RedirectAttributes redirAttrs) {
@@ -125,6 +123,7 @@ public class ArtistController {
         return "redirect:/artists/" + artist.getId();
     }
     // Supprime l'artiste dont l'id est présent dans l'adresse, puis retourne à la liste
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/artists/{id}")
     public String delete(@PathVariable long id, Model model, RedirectAttributes redirAttrs) {
         Artist existing = service.getArtist(id);
