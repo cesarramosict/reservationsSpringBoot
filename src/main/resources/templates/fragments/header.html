@@ -19,6 +19,22 @@
                 <li th:classappend="${module == 'artists' ? 'active' : ''}">
                     <a href="#" th:href="@{/artists}">Artists</a>
                 </li>
+                <li>
+                    <a th:href="@{/shows}">Spectacles</a>
+                </li>
+                <li>
+                    <a th:href="@{/representations}">Représentations</a>
+                </li>
+                <li>
+                    <a th:href="@{/types}">Types</a>
+                </li>
+                <li>
+                    <a th:href="@{/localities}">Localités</a>
+                </li>
+                <!-- Lien visible uniquement par l'administrateur -->
+                <li sec:authorize="hasRole('ADMIN')">
+                    <a th:href="@{/artists/create}">Nouvel artiste</a>
+                </li>
             </ul>
         </div>
         <div style="float:right">
